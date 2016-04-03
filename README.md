@@ -9,9 +9,46 @@ Library for managing a pool of connection.
 
 ## Features
 
-- [ ] Round Robin
-- [ ] Failed Connection Retry
+- [x] Round Robin
+- [x] Failed Connection Retry
 
+## Example
+
+```swift
+class PooledSockets : PoolConfiguration {
+
+    var maxErrorDuration: Duration = 1.minute
+    var retryDelay: Duration = 10.milliseconds
+    var connectionWait: Duration = 30.milliseconds
+    var maxReconnectDuration: Duration = 5.minutes
+
+    init(connections : [TCPClientSocket]) throws {
+        let pool = ConnectionPool<TCPClientSocket>(pool: connections, using: self)
+        
+        // Get a connection from the pool to use.
+        try pool.with({ connection in
+            // Use the connection as needed.
+            connection.send(Data("Hello Zewo"))
+        })
+        
+        // Borrow a connection from the pool.
+        // While borrowed the connection will not be used by the pool.
+        // The pool will begin to use connection when it is returned.
+        if let borrowedConnection = pool.borrow() {
+            // Return a borrowed connection to the pool.
+            pool.takeBack(borrowedConnection)
+        }
+        
+        if let borrowedConnection = pool.borrow() {
+            // Remove a connection from the pool.
+            pool.remove(connection)
+        }
+        
+        
+    }
+}
+
+```
 
 ## Community
 
