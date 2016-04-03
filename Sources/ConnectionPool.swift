@@ -170,7 +170,7 @@ public class ConnectionPool<PoolConnection : Connection where PoolConnection : A
         }
     }
     
-    public func with(handler: (poolable: PoolConnection) throws -> Any?) throws {
+    public func with(handler: (poolable: PoolConnection) throws -> Any?) throws -> Any? {
         var hasExecuted = false
         var nappedTime : Duration = 0.millisecond
 
@@ -193,9 +193,10 @@ public class ConnectionPool<PoolConnection : Connection where PoolConnection : A
                 }
                 
                 do {
-                    try handler(poolable: connection)
+                    let result = try handler(poolable: connection)
                     self.logSuccess(connection)
                     self.doneWith(connection)
+					return result
                 }
                 catch {
                     try self.logFailure(connection)
@@ -208,5 +209,7 @@ public class ConnectionPool<PoolConnection : Connection where PoolConnection : A
             }
             catch {}
         }
+		
+		return nil
     }
 }

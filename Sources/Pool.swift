@@ -6,7 +6,7 @@ public protocol Pool {
     associatedtype Poolable
     func borrow () -> Poolable?
     func takeBack (poolable: Poolable)
-    func with (handler: (poolable: Poolable) throws -> Any?) throws
+    func with (handler: (poolable: Poolable) throws -> Any?) throws -> Any?
 }
 
 public protocol PoolConfiguration {
