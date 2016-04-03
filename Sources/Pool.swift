@@ -1,3 +1,4 @@
+import Venice
 public enum PoolError : ErrorProtocol {
     case tooBusy, empty, timeout, maxErrorDurationExeceeded, maxWaitDurationExceeded, maxUnavailableDurationExceeded
 }
