@@ -43,8 +43,6 @@ class PooledSockets : PoolConfiguration {
             // Remove a connection from the pool.
             pool.remove(connection)
         }
-        
-        
     }
 }
 
