@@ -15,7 +15,7 @@ Library for managing a pool of connection.
 ## Example
 
 ```swift
-class PooledSockets : PoolConfiguration {
+final class PooledSockets: PoolConfiguration {
 
     // Set how long a pool can suffer a continued series of errors before it is removed from the pool.
     var maxErrorDuration: Duration = 1.minute
@@ -33,10 +33,10 @@ class PooledSockets : PoolConfiguration {
         let pool = ConnectionPool<TCPConnection>(pool: connections, using: self)
         
         // Get a connection from the pool to use.
-        try pool.with({ connection in
+        try pool.with { connection in
             // Use the connection as needed.
             connection.send(Data("Hello Zewo"))
-        })
+        }
         
         // Borrow a connection from the pool.
         // While borrowed the connection will not be used by the pool.
@@ -48,7 +48,7 @@ class PooledSockets : PoolConfiguration {
         
         if let borrowedConnection = pool.borrow() {
             // Remove a connection from the pool.
-            pool.remove(connection)
+            pool.remove(borrowedConnection)
         }
     }
 }
