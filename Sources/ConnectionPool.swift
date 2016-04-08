@@ -2,10 +2,10 @@ import C7
 import Venice
 import TCP
 
-public class ConnectionPool<PoolConnection : Connection where PoolConnection : AnyObject>  : Pool {
+public class ConnectionPool<PoolConnection: Connection where PoolConnection : AnyObject> : Pool {
 
     
-    var configuration : PoolConfiguration
+    var configuration: PoolConfiguration
     
     private var active = [PoolConnection]()
     private var lent = [PoolConnection]()
@@ -36,7 +36,7 @@ public class ConnectionPool<PoolConnection : Connection where PoolConnection : A
         return { $0 === connection }
     }
 
-    public func remove(connection : PoolConnection) -> Bool {
+    public func remove(connection: PoolConnection) -> Bool {
         let closed = connection.close()
         if closed {
             
@@ -136,14 +136,14 @@ public class ConnectionPool<PoolConnection : Connection where PoolConnection : A
         return nil
     }
     
-    private func doneWith(connection : PoolConnection) {
+    private func doneWith(connection: PoolConnection) {
         if let index = active.index(where: createPredicate(connection)) {
             active.remove(at: index)
             idle.append(connection)
         }
     }
     
-    private func logFailure(connection : PoolConnection) throws {
+    private func logFailure(connection: PoolConnection) throws {
         // if failed too many times remove from pool
         if let index = errorDurations.index(forKey: ObjectIdentifier(connection).hashValue) {
 
@@ -164,7 +164,7 @@ public class ConnectionPool<PoolConnection : Connection where PoolConnection : A
         doneWith(connection)
     }
     
-    private func logSuccess(connection : PoolConnection) {
+    private func logSuccess(connection: PoolConnection) {
         if let _ = errorDurations.index(forKey: ObjectIdentifier(connection).hashValue) {
             errorDurations.updateValue(0.millisecond, forKey: ObjectIdentifier(connection).hashValue)
         }
@@ -172,7 +172,7 @@ public class ConnectionPool<PoolConnection : Connection where PoolConnection : A
     
     public func with(handler: (poolable: PoolConnection) throws -> Any?) throws -> Any? {
         var hasExecuted = false
-        var nappedTime : Duration = 0.millisecond
+        var nappedTime: Duration = 0.millisecond
 
         while !hasExecuted {
             do {
