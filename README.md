@@ -29,8 +29,8 @@ class PooledSockets : PoolConfiguration {
     // How long to keep trying to reconnect a closed socket before removing it from the pool.
     var maxReconnectDuration: Duration = 5.minutes
 
-    init(connections : [TCPClientSocket]) throws {
-        let pool = ConnectionPool<TCPClientSocket>(pool: connections, using: self)
+    init(connections : [TCPConnection]) throws {
+        let pool = ConnectionPool<TCPConnection>(pool: connections, using: self)
         
         // Get a connection from the pool to use.
         try pool.with({ connection in
