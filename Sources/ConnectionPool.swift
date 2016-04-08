@@ -210,6 +210,6 @@ public class ConnectionPool<PoolConnection: Connection where PoolConnection : An
             catch {}
         }
 		
-		return nil
+	return nil
     }
 }
